@@ -1,0 +1,23 @@
+{
+  "name": "web-crawler-for-seo",
+  "version": "1.0.0",
+  "description": "JavaScript application that generates an \"internal links\" report for any website on the internet by crawling each page of the site.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EdisNezo/Web-Crawler-for-SEO.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EdisNezo/Web-Crawler-for-SEO/issues"
+  },
+  "homepage": "https://github.com/EdisNezo/Web-Crawler-for-SEO#readme",
+  "devDependencies": {
+    "jest": "^29.6.4"
+  }
+}
