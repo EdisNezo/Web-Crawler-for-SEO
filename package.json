@@ -19,5 +19,8 @@
   "homepage": "https://github.com/EdisNezo/Web-Crawler-for-SEO#readme",
   "devDependencies": {
     "jest": "^29.6.4"
+  },
+  "dependencies": {
+    "jsdom": "^22.1.0"
   }
 }

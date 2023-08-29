@@ -1,22 +1,69 @@
 const { test, expect } = require("@jest/globals");
-const { normalizeURL } = require("./crawl.js");
+const { normalizeURL, getURLsFromHTML } = require("./crawl.js");
 
-const url_1 = "https://blog.boot.dev/path/";
-const url_2 = "https://blog.boot.dev/path";
-const url_3 = "http://blog.boot.dev/path/";
-const url_4 = "http://blog.boot.dev/path";
+test("normalizeURL protocol", () => {
+  const input = "https://blog.boot.dev/path";
+  const actual = normalizeURL(input);
+  const expected = "blog.boot.dev/path";
+  expect(actual).toEqual(expected);
+});
 
-const expected_url = "blog.boot.dev/path";
+test("normalizeURL slash", () => {
+  const input = "https://blog.boot.dev/path/";
+  const actual = normalizeURL(input);
+  const expected = "blog.boot.dev/path";
+  expect(actual).toEqual(expected);
+});
 
-test(`used url: ${url_1}`, () => {
-  expect(normalizeURL(url_1)).toBe(expected_url);
+test("normalizeURL capitals", () => {
+  const input = "https://BLOG.boot.dev/path";
+  const actual = normalizeURL(input);
+  const expected = "blog.boot.dev/path";
+  expect(actual).toEqual(expected);
 });
-test(`used url: ${url_2}`, () => {
-  expect(normalizeURL(url_2)).toBe(expected_url);
+
+test("normalizeURL http", () => {
+  const input = "http://BLOG.boot.dev/path";
+  const actual = normalizeURL(input);
+  const expected = "blog.boot.dev/path";
+  expect(actual).toEqual(expected);
 });
-test(`used url: ${url_3}`, () => {
-  expect(normalizeURL(url_3)).toBe(expected_url);
+
+test("getURLsFromHTML absolute", () => {
+  const inputURL = "https://blog.boot.dev";
+  const inputBody =
+    '<html><body><a href="https://blog.boot.dev"><span>Boot.dev></span></a></body></html>';
+  const actual = getURLsFromHTML(inputBody, inputURL);
+  const expected = ["https://blog.boot.dev/"];
+  expect(actual).toEqual(expected);
 });
-test(`used url: ${url_4}`, () => {
-  expect(normalizeURL(url_4)).toBe(expected_url);
+
+test("getURLsFromHTML relative", () => {
+  const inputURL = "https://blog.boot.dev";
+  const inputBody =
+    '<html><body><a href="/path/one"><span>Boot.dev></span></a></body></html>';
+  const actual = getURLsFromHTML(inputBody, inputURL);
+  const expected = ["https://blog.boot.dev/path/one"];
+  expect(actual).toEqual(expected);
+});
+
+test("getURLsFromHTML both", () => {
+  const inputURL = "https://blog.boot.dev";
+  const inputBody =
+    '<html><body><a href="/path/one"><span>Boot.dev></span></a><a href="https://other.com/path/one"><span>Boot.dev></span></a></body></html>';
+  const actual = getURLsFromHTML(inputBody, inputURL);
+  const expected = [
+    "https://blog.boot.dev/path/one",
+    "https://other.com/path/one",
+  ];
+  expect(actual).toEqual(expected);
+});
+
+test("getURLsFromHTML handle error", () => {
+  const inputURL = "https://blog.boot.dev";
+  const inputBody =
+    '<html><body><a href="path/one"><span>Boot.dev></span></a></body></html>';
+  const actual = getURLsFromHTML(inputBody, inputURL);
+  const expected = [];
+  expect(actual).toEqual(expected);
 });
